@@ -6,7 +6,7 @@ require 'puppet-strings/yard/parsers/puppet/statement'
 
 # Implements the Puppet language parser.
 class PuppetStrings::Yard::Parsers::Puppet::Parser < YARD::Parser::Base
-  attr_reader :file, :source
+  attr_reader :file, :source, :error
 
   # Initializes the parser.
   # @param [String] source The source being parsed.
@@ -28,8 +28,10 @@ class PuppetStrings::Yard::Parsers::Puppet::Parser < YARD::Parser::Base
         return
       end
       @statements ||= (@visitor.visit(::Puppet::Pops::Parser::Parser.new.parse_string(source)) || []).compact
+      @error = nil
     rescue ::Puppet::ParseError => e
       log.error "Failed to parse #{@file}: #{e.message}"
+      @error = e
       @statements = []
     end
     @statements.freeze

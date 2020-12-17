@@ -23,13 +23,17 @@
 # @param param4 Fourth param.
 # @enum param4 :one One option
 # @enum param4 :two Second option
-#
+# @param apply An apply param
 class klass (
   Integer $param1 = 1,
   $param2 = undef,
   String $param3 = 'hi',
   Enum['one', 'two'] $param4 = 'two',
+  String[1] $apply = 'disk_name => config in host.vars.disks',
 ) inherits foo::bar {
+  foo::baz { 'my baz':
+    apply => $apply
+  }
 }
 
 # Overview for class noparams
@@ -56,11 +60,16 @@ class noparams () {}
 # @param param5 Fifth param.
 # @enum param5 :a Option A
 # @enum param5 :b Option B
+# @param apply An apply param
 define klass::dt (
   Integer $param1 = 44,
   $param2,
   String $param3 = 'hi',
   Boolean $param4 = true,
-  Enum['a', 'b'] $param5 = 'a'
+  Enum['a', 'b'] $param5 = 'a',
+  String[1] $apply = 'disk_name => config in host.vars.disks',
 ) {
+  foo::baz { 'my baz':
+    apply => $apply,
+  }
 }

@@ -15,30 +15,34 @@ describe PuppetStrings::Markdown do
     @fixtures[fixture] ||= File.read(File.join(fixture_path, fixture))
   end
 
+  def assert_parses(parser)
+    expect(parser.error).to be_nil
+  end
+
   def parse_shared_content
     # Populate the YARD registry with both Puppet and Ruby source
-    YARD::Parser::SourceParser.parse_string(fixture_content("puppet/class.pp"), :puppet)
-    YARD::Parser::SourceParser.parse_string(fixture_content("puppet/function.pp"), :puppet)
-    YARD::Parser::SourceParser.parse_string(fixture_content("ruby/func4x.rb"), :ruby)
-    YARD::Parser::SourceParser.parse_string(fixture_content("ruby/func4x_1.rb"), :ruby)
-    YARD::Parser::SourceParser.parse_string(fixture_content("ruby/func3x.rb"), :ruby)
-    YARD::Parser::SourceParser.parse_string(fixture_content("ruby/func3x.rb"), :ruby)
-    YARD::Parser::SourceParser.parse_string(fixture_content("ruby/provider.rb"), :ruby)
-    YARD::Parser::SourceParser.parse_string(fixture_content("ruby/resource_type.rb"), :ruby)
-    YARD::Parser::SourceParser.parse_string(fixture_content("ruby/resource_api.rb"), :ruby)
+    assert_parses YARD::Parser::SourceParser.parse_string(fixture_content("puppet/class.pp"), :puppet)
+    assert_parses YARD::Parser::SourceParser.parse_string(fixture_content("puppet/function.pp"), :puppet)
+    assert_parses YARD::Parser::SourceParser.parse_string(fixture_content("ruby/func4x.rb"), :ruby)
+    assert_parses YARD::Parser::SourceParser.parse_string(fixture_content("ruby/func4x_1.rb"), :ruby)
+    assert_parses YARD::Parser::SourceParser.parse_string(fixture_content("ruby/func3x.rb"), :ruby)
+    assert_parses YARD::Parser::SourceParser.parse_string(fixture_content("ruby/func3x.rb"), :ruby)
+    assert_parses YARD::Parser::SourceParser.parse_string(fixture_content("ruby/provider.rb"), :ruby)
+    assert_parses YARD::Parser::SourceParser.parse_string(fixture_content("ruby/resource_type.rb"), :ruby)
+    assert_parses YARD::Parser::SourceParser.parse_string(fixture_content("ruby/resource_api.rb"), :ruby)
 
     # task metadata derives the task name from the filename, so we have to parse
     # directly from the filesystem to correctly pick up the name
-    YARD::Parser::SourceParser.parse(File.join(fixture_path, "json/backup.json"))
+    assert_parses YARD::Parser::SourceParser.parse(File.join(fixture_path, "json/backup.json"))
   end
 
   def parse_plan_content
-    YARD::Parser::SourceParser.parse_string(fixture_content("puppet/plan.pp"), :puppet)
+    assert_parses YARD::Parser::SourceParser.parse_string(fixture_content("puppet/plan.pp"), :puppet)
   end
 
   def parse_data_type_content
-    YARD::Parser::SourceParser.parse_string(fixture_content("ruby/data_type.rb"), :ruby)
-    YARD::Parser::SourceParser.parse_string(fixture_content("puppet/type_alias.pp"), :puppet)
+    assert_parses YARD::Parser::SourceParser.parse_string(fixture_content("ruby/data_type.rb"), :ruby)
+    assert_parses YARD::Parser::SourceParser.parse_string(fixture_content("puppet/type_alias.pp"), :puppet)
   end
 
   let(:output) { PuppetStrings::Markdown.generate }

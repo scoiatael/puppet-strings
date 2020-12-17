@@ -29,6 +29,7 @@ require 'puppet-strings'
 require 'puppet-strings/markdown'
 require 'puppet-strings/markdown/base'
 require 'puppet-strings/yard'
+require 'pry'
 
 # Explicitly set up YARD once
 PuppetStrings::Yard.setup!
